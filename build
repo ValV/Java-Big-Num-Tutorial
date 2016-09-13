@@ -1,0 +1,4 @@
+#!/bin/bash
+
+\rm -fr target/*
+javac -d target -cp src/main/java src/test/java/*.java

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+pushd target >/dev/null
+for FILE in *.class
+do
+	CLASS=${FILE%.*}
+	echo ">>> Running $CLASS"
+	echo
+	java $CLASS
+done
+popd >/dev/null
