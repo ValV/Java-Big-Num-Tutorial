@@ -59,6 +59,7 @@ public class BigNum {
 	public BigNum(int number, byte base) {
 		// Create from int with custom base
 		base = (base > this.BASE_MAX) ? this.BASE_MAX : base; // trim base
+		base = (base < this.BASE_MIN) ? this.BASE_MIN : base; // trim base
 		if (number < 0) number = -number; // only positive
 		this.base = base;
 		this.data = new ArrayList<Byte>(this.length);
@@ -78,6 +79,7 @@ public class BigNum {
 	public BigNum(String number, byte base) {
 		// Create from String
 		base = (base > this.BASE_MAX) ? this.BASE_MAX : base; // trim base
+		base = (base < this.BASE_MIN) ? this.BASE_MIN : base; // trim base
 		number = number.toUpperCase();
 		this.base = base;
 		this.data = new ArrayList<Byte>(this.length);
