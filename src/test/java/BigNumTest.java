@@ -22,7 +22,7 @@
  */
 
 import java.lang.Integer;
-import org.linuxmail.valv.BigNum;
+import com.github.valv.BigNum;
 
 /**
  * BigNumTest class provides test suit for BigNum class.

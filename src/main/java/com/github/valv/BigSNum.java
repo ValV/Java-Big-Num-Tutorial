@@ -21,7 +21,7 @@
  * <valv at linuxmail dot org>, 15 September 2016
  */
 
-package org.linuxmail.valv;
+package com.github.valv;
 
 import java.util.ArrayList;
 import java.util.List;
