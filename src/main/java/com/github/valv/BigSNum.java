@@ -133,9 +133,11 @@ public class BigSNum extends BigNum {
 
 	@Override
 	public BigNum divide(BigNum number) {
+		return null;
 	}
 
 	public BigNum divide(BigSNum number) {
+		return null;
 	}
 
 	@Override
