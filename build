@@ -1,4 +1,6 @@
 #!/bin/bash
 
-\rm -fr target/*
-javac -d target -cp src/main/java src/test/java/*.java
+unalias -a
+
+mkdir -p target &&  rm -rf target/*
+javac -d target -cp src/main/java src/test/java/LegacyTestBigNum.java
