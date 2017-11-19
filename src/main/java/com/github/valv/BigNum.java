@@ -157,7 +157,7 @@ public class BigNum {
     }
     // Return zero if subtrahend explicitly larger than minuend
     if (this.compare(number) <= 0) {
-      this.data = new ArrayList<Byte>(1);
+      this.data = new ArrayList<Byte>(); // old ArrayList will be GCed
       this.data.add((byte) ((this.length = 1) - 1));
       return;
     }
@@ -187,19 +187,30 @@ public class BigNum {
 
   // Multiplication method
   public void multiply(BigNum number) {
-    if (this.length < 1 || number.length < 1) return;
-    if (number.length == 1) {
-      if (number.data.get(0) <= 0) {
-        // Zero is returned when 'this' is multiplied by
-        // zero or infinity ('cause there may be the only one
-        // infinity in the universe)
-        this.data = new ArrayList<Byte>(1);
-        this.data.set(0, (byte) 0);
-        return;
-      } else {
+    // Filter numbers that can not be processed (yet)
+    if (this.length < 1 || number.length < 1 || this.radix != number.radix) {
+      return;
+    }
+    // Handle special cases: 0, -1, x
+    if (this.length == 1 || number.length == 1) {
+      byte thisDigit = this.data.get(0);
+      byte thatDigit = number.data.get(0);
+      if ((thisDigit <= 0 && this.length == 1)
+          || (thatDigit <= 0 && number.length == 1)) {
+        this.data = new ArrayList<Byte>(); // old ArrayList will be GCed
+        if (thisDigit == 0 || thatDigit == 0) {
+          // Product is zero when multiplicand or multiplier is zero
+          this.data.add((byte) 0);
+        } else {
+          // Product is infinity when multiplicand or multiplier is infinity
+          this.data.add((byte) -1);
+        }
+        return; // 0 and -1 cases
+      }
+      if (number.length == 1) {
         // Multiply by one-digit number
-        this.multiplyByDigit(number.data.get(0));
-        return;
+        this.multiplyByDigit(thatDigit);
+        return; // x case
       }
     }
     // Multiply long numbers (log-space algorithm)
