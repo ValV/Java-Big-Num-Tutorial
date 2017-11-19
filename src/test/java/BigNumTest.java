@@ -138,17 +138,17 @@ public class BigNumTest {
     BigNum testNumber1 = new BigNum("100000000000000000000"); // 21 dec
     assertNotNull("String constructor failed:", testNumber1);
     BigNum testNumber2 = new BigNum(1); // one
-    assertNotNull("Integer/radix constructor failed:", testNumber2);
+    assertNotNull("Integer constructor failed:", testNumber2);
     BigNum testNumber3 = new BigNum(0); // zero
     assertNotNull("Integer constructor failed:", testNumber3);
     BigNum testNumber4 = new BigNum("100000000000000000000", hex); // 21 hex
-    assertNotNull("Integer/radix constructor failed:", testNumber4);
+    assertNotNull("String/radix constructor failed:", testNumber4);
     BigNum testNumber5 = new BigNum("80000000000000000000", hex); // 20 hex
-    assertNotNull("Integer/radix constructor failed:", testNumber5);
+    assertNotNull("String/radix constructor failed:", testNumber5);
     BigNum testNumber6 = new BigNum(1, hex); // 0x1
-    assertNotNull("Integer constructor failed:", testNumber6);
+    assertNotNull("Integer/radix constructor failed:", testNumber6);
     BigNum testNumber7 = new BigNum(0, hex); // 0x0
-    assertNotNull("Integer constructor failed:", testNumber7);
+    assertNotNull("Integer/radix constructor failed:", testNumber7);
     BigNum testNumber8 = new BigNum(); // null
     assertNotNull("Default constructor failed:", testNumber8);
     // Subtract values
@@ -185,7 +185,56 @@ public class BigNumTest {
 
   @Test
   public void testMultiplication() {
-    System.out.println("\n...:::Multiplication test:::...");
+    // Create numbers
+    byte hex = 16;
+    // Multiplication is supported only by object (BigNum)
+    BigNum testNumber1 = new BigNum("55555555555555555555"); // 20 dec
+    assertNotNull("String constructor failed:", testNumber1);
+    BigNum testNumber2 = new BigNum(2); // two
+    assertNotNull("Integer constructor failed:", testNumber2);
+    BigNum testNumber3 = new BigNum(1); // one
+    assertNotNull("Integer constructor failed:", testNumber3);
+    BigNum testNumber4 = new BigNum(0); // zero
+    assertNotNull("Integer constructor failed:", testNumber4);
+    BigNum testNumber5 = new BigNum("88888888888888888888", hex); // 20 hex
+    assertNotNull("String/radix constructor failed:", testNumber5);
+    BigNum testNumber6 = new BigNum(2, hex); // 0x2
+    assertNotNull("String/radix constructor failed:", testNumber6);
+    BigNum testNumber7 = new BigNum(1, hex); // 0x1
+    assertNotNull("Integer/radix constructor failed:", testNumber7);
+    BigNum testNumber8 = new BigNum(0, hex); // 0x0
+    assertNotNull("Integer/radix constructor failed:", testNumber8);
+    BigNum testNumber9 = new BigNum(); // null
+    assertNotNull("Default constructor failed:", testNumber9);
+    // Multiply values
+    testNumber1.multiply(testNumber2);
+    testNumber1.multiply(testNumber3);
+    assertEquals("Default (decimal) digit-shift and one multiplication failed:",
+      "111111111111111111110", testNumber1.toString());
+    testNumber5.multiply(testNumber6);
+    testNumber5.multiply(testNumber7);
+    assertEquals("Hexadecimal digit-shift and one multiplication failed:",
+      "111111111111111111110", testNumber5.toString());
+    testNumber2.multiply(testNumber4);
+    assertEquals("Default (decimal) number-zero multiplication failed:",
+      "0", testNumber2.toString());
+    testNumber8.multiply(testNumber6);
+    assertEquals("Hexadecimal zero-number multiplication failed:",
+      "0", testNumber8.toString());
+    testNumber4.multiply(testNumber9);
+    assertEquals("Default (decimal) zero-null multiplication failed:",
+      "0", testNumber4.toString());
+    testNumber9.multiply(testNumber4);
+    assertEquals("Default (decimal) null-zero multiplication failed:",
+      "null", testNumber9.toString());
+    // Display values
+    System.out.println("\n...:::Multiplication test:::..."
+      + "\n55555555555555555555 * 2 * 1 = " + testNumber1
+      + "\n0x88888888888888888888 * 0x2 * 0x1 = 0x" + testNumber5
+      + "\n2 * 0 = " + testNumber2
+      + "\n0x0 * 0x2 = 0x" + testNumber8
+      + "\n0 * null = " + testNumber4
+      + "\nnull * 0 = " + testNumber9);
   }
 
   @Test
