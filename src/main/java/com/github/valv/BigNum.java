@@ -38,7 +38,7 @@ public class BigNum {
 	static final byte BASE_MAX = 36;
 	static final byte BASE_DEFAULT = 10;
 	static final byte BASE_MIN = 2;
-	static final String BASE_SYMBOL = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	static final String BASE_SYMBOL = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 	protected byte base = BASE_DEFAULT;
 	protected int length = 0;
@@ -80,7 +80,7 @@ public class BigNum {
 		// Create from String
 		base = (base > this.BASE_MAX) ? this.BASE_MAX : base; // trim base
 		base = (base < this.BASE_MIN) ? this.BASE_MIN : base; // trim base
-		number = number.toUpperCase();
+		number = number.toLowerCase();
 		this.base = base;
 		this.data = new ArrayList<Byte>(this.length);
 		int digit = 0;
