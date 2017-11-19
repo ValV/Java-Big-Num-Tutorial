@@ -41,6 +41,8 @@ public class BigNumTest {
     // BigNum class has several constructors:
     // BigNum(), BigNum(int), BigNum(int, byte),
     // BigNum(String), BigNum(String, byte), BigNum(BigNum)
+    // Unsigned long integer max value is 18446744073709551615 (20 characters),
+    // but maximum numeric value for the class constructor is 2147483647
     BigNum testNumber1 = new BigNum(Integer.MAX_VALUE);
     assertNotNull("Integer constructor failed:", testNumber1);
     BigNum testNumber2 = new BigNum(Integer.MAX_VALUE, hex);
@@ -80,8 +82,6 @@ public class BigNumTest {
   public void testAddition() {
     // Create numbers
     byte hex = 16;
-    // Unsigned long integer max value is 18446744073709551615 (20 characters),
-    // but maximum numeric value for the class constructor is 2147483647
     // Addition is implemented for BigNum arguments only (.add(BigNum))
     // Addition is possible only with arguments of the same radix
     // Addition with null does not affect a value
@@ -130,7 +130,57 @@ public class BigNumTest {
 
   @Test
   public void testSubtraction() {
-    System.out.println("\n...:::Subtraction test:::...");
+    // Create numbers
+    byte hex = 16;
+    // Subtraction is not performed if a number has less than one digit (null)
+    // If subtrahend is more than minuend, then zero is returned
+    // Operations on numbers with different radix are not supported yet
+    BigNum testNumber1 = new BigNum("100000000000000000000"); // 21 dec
+    assertNotNull("String constructor failed:", testNumber1);
+    BigNum testNumber2 = new BigNum(1); // one
+    assertNotNull("Integer/radix constructor failed:", testNumber2);
+    BigNum testNumber3 = new BigNum(0); // zero
+    assertNotNull("Integer constructor failed:", testNumber3);
+    BigNum testNumber4 = new BigNum("100000000000000000000", hex); // 21 hex
+    assertNotNull("Integer/radix constructor failed:", testNumber4);
+    BigNum testNumber5 = new BigNum("80000000000000000000", hex); // 20 hex
+    assertNotNull("Integer/radix constructor failed:", testNumber5);
+    BigNum testNumber6 = new BigNum(1, hex); // 0x1
+    assertNotNull("Integer constructor failed:", testNumber6);
+    BigNum testNumber7 = new BigNum(0, hex); // 0x0
+    assertNotNull("Integer constructor failed:", testNumber7);
+    BigNum testNumber8 = new BigNum(); // null
+    assertNotNull("Default constructor failed:", testNumber8);
+    // Subtract values
+    testNumber1.subtract(testNumber2);
+    testNumber1.subtract(testNumber3);
+    assertEquals("Default (decimal) digit-shift and zero subtraction failed:",
+      "99999999999999999999", testNumber1.toString());
+    testNumber4.subtract(testNumber5);
+    testNumber4.subtract(testNumber7);
+    assertEquals("Hexadecimal digit-shift and zero subtraction failed:",
+      "80000000000000000000", testNumber4.toString());
+    testNumber5.subtract(testNumber6);
+    assertEquals("Hexadecimal non-shift subtraction failed:",
+      "7fffffffffffffffffff", testNumber5.toString());
+    testNumber2.subtract(testNumber1);
+    assertEquals("Underflow subtraction failed:",
+      "0", testNumber2.toString());
+    testNumber3.subtract(testNumber8);
+    assertEquals("Default (decimal) zero-null subtraction failed:",
+      "0", testNumber3.toString());
+    testNumber8.subtract(testNumber3);
+    assertEquals("Default (decimal) null-zero subtraction failed:",
+      "null", testNumber8.toString());
+    // Display values
+    System.out.println("\n...:::Subtraction test:::..."
+      + "\n100000000000000000000 - 1 - 0 = " + testNumber1
+      + "\n0x100000000000000000000 - 0x80000000000000000000 - 0x0 = 0x"
+      + testNumber4
+      + "\n0x80000000000000000000 - 0x1 = 0x" + testNumber5
+      + "\n1 - 99999999999999999999 = " + testNumber2
+      + "\n0 - null = " + testNumber3
+      + "\nnull - 0 = " + testNumber8);
   }
 
   @Test
@@ -149,4 +199,4 @@ public class BigNumTest {
   }
 }
 
-// vim: set si et ts=2 sw=2 :
+/* vim: set si et ts=2 sw=2: */
