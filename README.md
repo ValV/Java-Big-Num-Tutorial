@@ -102,4 +102,4 @@ $ mvn test
   - [ ] Remove legacy build system (bash scripts)
   - [ ] Add JavaDoc
 
-vim: si et ts=2 sw=2:
+<!-- vim: si et ts=2 sw=2: -->
