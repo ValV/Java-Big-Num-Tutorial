@@ -188,6 +188,8 @@ public class BigNumTest {
     // Create numbers
     byte hex = 16;
     // Multiplication is supported only by object (BigNum)
+    // Multiplication of numbers with different radix is not supported yet
+    // Multiplication by zero or infinity will result respectively
     BigNum testNumber1 = new BigNum("55555555555555555555"); // 20 dec
     assertNotNull("String constructor failed:", testNumber1);
     BigNum testNumber2 = new BigNum(2); // two
@@ -199,7 +201,7 @@ public class BigNumTest {
     BigNum testNumber5 = new BigNum("88888888888888888888", hex); // 20 hex
     assertNotNull("String/radix constructor failed:", testNumber5);
     BigNum testNumber6 = new BigNum(2, hex); // 0x2
-    assertNotNull("String/radix constructor failed:", testNumber6);
+    assertNotNull("Integer/radix constructor failed:", testNumber6);
     BigNum testNumber7 = new BigNum(1, hex); // 0x1
     assertNotNull("Integer/radix constructor failed:", testNumber7);
     BigNum testNumber8 = new BigNum(0, hex); // 0x0
@@ -239,7 +241,61 @@ public class BigNumTest {
 
   @Test
   public void testDivision() {
-    System.out.println("\n...:::Division test:::...");
+    // Create numbers
+    byte hex = 16;
+    BigNum testNumber1 = new BigNum("44444444444444444444"); // 20 dec
+    assertNotNull("String constructor failed:", testNumber1);
+    BigNum testNumber2 = new BigNum(20); // twenty
+    assertNotNull("Integer constructor failed:", testNumber2);
+    BigNum testNumber3 = new BigNum(1); // one
+    assertNotNull("Integer constructor failed:", testNumber3);
+    BigNum testNumber4 = new BigNum(0); // zero
+    assertNotNull("Integer constructor failed:", testNumber4);
+    BigNum testNumber5 = new BigNum("cccccccccccccccccccc", hex); // 20 hex
+    assertNotNull("String/radix constructor failed:", testNumber5);
+    BigNum testNumber6 = new BigNum(32, hex); // 0x20
+    assertNotNull("Integer/radix constructor failed:", testNumber6);
+    BigNum testNumber7 = new BigNum(1, hex); // 0x1
+    assertNotNull("Integer/radix constructor failed:", testNumber7);
+    BigNum testNumber8 = new BigNum(0, hex); // 0x0
+    assertNotNull("Integer/radix constructor failed:", testNumber8);
+    BigNum testNumber9 = new BigNum(); // null
+    assertNotNull("Default constructor failed:", testNumber9);
+    // Divide values
+    BigNum testRemainder1 = new BigNum(testNumber1.divide(testNumber2));
+    BigNum testRemainder2 = new BigNum(testNumber1.divide(testNumber3));
+    assertEquals("Default (decimal) digit-shift and one division failed:",
+      "2222222222222222222", testNumber1.toString());
+    BigNum testRemainder3 = new BigNum(testNumber5.divide(testNumber6));
+    BigNum testRemainder4 = new BigNum(testNumber5.divide(testNumber7));
+    assertEquals("Hexadecimal digit-shift and one division failed:",
+      "6666666666666666666", testNumber5.toString());
+    testNumber2.divide(testNumber4);
+    assertEquals("Default (decimal) number-by-zero division failed:",
+      "null", testNumber2.toString());
+    testNumber6.divide(testNumber8);
+    assertEquals("Hexadecimal number-by-zero division failed:",
+      "null", testNumber6.toString());
+    testNumber4.divide(testNumber9);
+    assertEquals("Default (decimal) zero-by-null division failed:",
+      "0", testNumber4.toString());
+    testNumber9.divide(testNumber4);
+    assertEquals("Default (decimal) null-by-zero division failed:",
+      "null", testNumber9.toString());
+    // Display values
+    System.out.println("\n...:::Division test:::..."
+      + "\n44444444444444444444 % 20 = " + testNumber1
+      + " + " + testRemainder1 + "/20"
+      + "\n44444444444444444444 % 1 = " + testNumber1
+      + " + " + testRemainder2 + "/1"
+      + "\n0xcccccccccccccccccccc % 0x20 = 0x" + testNumber5
+      + " + " + testRemainder3 + "/0x20"
+      + "\n0xcccccccccccccccccccc % 0x1 = 0x" + testNumber5
+      + " + " + testRemainder4 + "/0x1"
+      + "\n20 % 0 = " + testNumber2
+      + "\n0x20 % 0x0 = " + testNumber6
+      + "\n0 % null = " + testNumber4
+      + "\nnull % 0 = " + testNumber9);
   }
 
   @Test
