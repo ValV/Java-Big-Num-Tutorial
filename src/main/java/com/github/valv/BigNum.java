@@ -228,55 +228,75 @@ public class BigNum {
       total /= this.radix;
     }
     product.add((byte) (total % this.radix));
+    // Remove leading zeroes
     while (ip > 0 && product.get(ip) <= 0) {
       product.remove(ip --);
-    } // remove leading zeroes
-    product.trimToSize(); // release unused memory
+    }
+    // Trim list of digits (assume any garbage)
+    product.trimToSize();
     this.data = product;
     this.length = this.data.size();
   }
 
+  // Division method
   public BigNum divide(BigNum number) {
-    // Division method
-    // returns: remainder; quotient is stored as 'this' data
-    if (this.length < 1 || number.length < 1) return (number);
-    if (number.length == 1) {
-      if (number.data.get(0) <= 0) {
-      // Division by zero (or infinity - doesn't matter)
-      // causes infinity
-      this.data = new ArrayList<Byte>(1);
-      this.data.add((byte) -(this.length = 1)); // set to infinity
-      return (number); // return divisor (zero)
-      } else {
+    // Filter numbers that can not be processed (yet)
+    if (this.length < 1 || number.length < 1 || this.radix != number.radix) {
+      return new BigNum(0); // return zero (useless object generator)
+    }
+    if (this.length == 1 || number.length == 1) {
+      byte thisDigit = this.data.get(0);
+      byte thatDigit = number.data.get(0);
+      if ((thisDigit <= 0 && this.length == 1)
+          || (thatDigit <= 0 && number.length == 1)) {
+        this.data = new ArrayList<Byte>(); // old ArrayList will be GCed
+        this.length = 0;
+        if (thisDigit != -1  && thatDigit == -1) {
+          // Divide anything except infinity by infinity -> zero
+          this.data.add((byte) ((this.length = 1) - 1));
+        }
+        if (thisDigit != 0 && thatDigit == 0) {
+          // Divide anything except zero by zero -> infinity
+          this.data.add((byte) -(this.length = 1));
+        }
+        if (thisDigit == -1 && thatDigit > -1) {
+          // Divide infinity by anything except infinity -> infinity
+          this.data.add((byte) -(this.length = 1));
+        }
+        if (thisDigit == 0 && thatDigit > 0) {
+          // Divide zero by anything except zero -> zero
+          this.data.add((byte) ((this.length = 1) - 1));
+        }
+        return new BigNum(0); // return zero
+      }
+      if (number.length == 1) {
         // Call division by a digit
-        byte remainder = this.divideByDigit(number.data.get(0));
-        return (new BigNum(remainder));
+        byte remainder = this.divideByDigit(thatDigit);
+        return new BigNum(remainder);
       }
     }
     int comparison = this.compare(number);
     if (comparison < 0) {
-      // Divisor is more than the divident ->
-      // quotient = 0, remainder = divisor
-      this.data = new ArrayList<Byte>(1);
+      // Divisor > divident -> quotient = 0, remainder = divisor
+      this.data = new ArrayList<Byte>();
       this.data.add((byte) ((this.length = 1) - 1)); // set to zero
       return (number); // return divisor
     }
     if (comparison == 0) {
       // Divisor is equal to the divident ->
       // quitient = 1, remainder = 0
-      this.data = new ArrayList<Byte>(1);
+      this.data = new ArrayList<Byte>();
       this.data.add((byte) (this.length = 1)); // set to one
-      return (new BigNum(0)); // return zero
+      return new BigNum(0); // return zero
     }
-    // At this time 'number' is at least 2 digits long
-    // (as well as 'this' is)
+    // At this time divisor is at least 2 digits long (as well as dividend)
     int n = number.length;
     int m = this.length - number.length;
     BigNum divident = this;
     BigNum divisor = new BigNum(number);
     BigNum remainder = new BigNum();
     remainder.radix = this.radix;
-    ArrayList<Byte> quotient = new ArrayList<Byte>(0);
+    ArrayList<Byte> quotient = new ArrayList<Byte>();
     // D1
     int normalizer = (divident.radix - 1) / divisor.data.get(n - 1);
     divident.multiplyByDigit((byte) normalizer);
@@ -341,19 +361,19 @@ public class BigNum {
 
   /* Protected methods */
 
+  // Comparison method
   protected int compare(BigNum number) {
-    // Comparison method
     if (this.length > number.length)
-      return 1; // more by digit
+      return 1; // greater by digit
     else if (this.length < number.length) {
-      return -1; // less by digit
+      return -1; // lesser by digit
     } else { // equal by digit
       byte internal = 0, external = 0;
       for (int index = this.length - 1; index >= 0; index --) {
         internal = this.data.get(index);
         external = number.data.get(index);
-        if (internal > external) return 1; // more by value
-        else if (internal < external) return -1; // less by value
+        if (internal > external) return 1; // greater by value
+        else if (internal < external) return -1; // lesser by value
       }
       return 0; // equal by value
     }
@@ -388,8 +408,8 @@ public class BigNum {
     return ((byte) remainder);
   }
 
+  // Increase this by 1
   protected void increment() {
-    // Increase this by 1
     int index = 0;
     int carry = 1; // actually increment
     do {
