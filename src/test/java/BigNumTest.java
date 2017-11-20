@@ -299,8 +299,17 @@ public class BigNumTest {
   }
 
   @Test
-  public void testStub () {
-    assertEquals(true, true);
+  public void testFactorial () {
+    BigNum testFactorial = new BigNum(1);
+    for (int index = 1; index <= 1000; index ++) {
+      testFactorial.multiply(new BigNum(index));
+    }
+    assertEquals("Calculation of 1000! failed:",
+      2568, testFactorial.length());
+    System.out.println("\n...:::Factorial of 1000:::..."
+      + "\n1000! = " + testFactorial
+      + " (" + Integer.toString(testFactorial.length()) + " digits)");
+
   }
 }
 
