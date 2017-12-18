@@ -52,13 +52,23 @@ public class BigNum {
 
   // Integer constructor
   public BigNum(int number) {
-    this(number, BigNum.RADIX_DEFAULT); // default radix is 10
+    this((long) number, BigNum.RADIX_DEFAULT);
   }
 
   // Integer/radix constructor
   public BigNum(int number, byte radix) {
-    radix = (radix > this.RADIX_MAX) ? this.RADIX_MAX : radix; // trim radix
-    radix = (radix < this.RADIX_MIN) ? this.RADIX_MIN : radix; // trim radix
+    this((long) number, radix);
+  }
+
+  // Long constructor
+  public BigNum(long number) {
+    this(number, BigNum.RADIX_DEFAULT);
+  }
+
+  // Long/radix constructor
+  public BigNum(long number, byte radix) {
+    radix = (radix > this.RADIX_MAX) ? this.RADIX_MAX :
+            (radix < this.RADIX_MIN) ? this.RADIX_MIN : radix; // trim radix
     if (number < 0) number = -number; // only positive
     this.radix = radix;
     this.data = new ArrayList<Byte>(this.length);
@@ -77,8 +87,8 @@ public class BigNum {
 
   // String/radix constructor
   public BigNum(String number, byte radix) {
-    radix = (radix > this.RADIX_MAX) ? this.RADIX_MAX : radix; // trim radix
-    radix = (radix < this.RADIX_MIN) ? this.RADIX_MIN : radix; // trim radix
+    radix = (radix > this.RADIX_MAX) ? this.RADIX_MAX :
+            (radix < this.RADIX_MIN) ? this.RADIX_MIN : radix; // trim radix
     number = number.toLowerCase();
     this.radix = radix;
     this.data = new ArrayList<Byte>(this.length);
@@ -98,8 +108,8 @@ public class BigNum {
     this.radix = number.radix;
     this.length = number.length;
     this.data = new ArrayList<Byte>(this.length);
-    for (byte digit: number.data) { // deep copy
-      this.data.add(digit);
+    for (byte digit: number.data) {
+      this.data.add(digit); // deep copy
     }
   }
 
@@ -297,7 +307,7 @@ public class BigNum {
     BigNum remainder = new BigNum();
     remainder.radix = this.radix;
     ArrayList<Byte> quotient = new ArrayList<Byte>();
-    // D1
+    // D1 (Division algorithm as explained by D. Knuth in TAOCP with small fix)
     int normalizer = (divident.radix - 1) / divisor.data.get(n - 1);
     divident.multiplyByDigit((byte) normalizer);
     if (divident.length == m + n) { // normalizer == 1
@@ -435,7 +445,7 @@ public class BigNum {
     StringBuilder output = new StringBuilder("");
     byte digit = 0;
     for (int position = this.length; position > 0; position --) {
-      // Append fron the end of the array list
+      // Append from the end of the array list
       digit = this.data.get(position - 1);
       if (digit < 0) {
         output.append('-');
