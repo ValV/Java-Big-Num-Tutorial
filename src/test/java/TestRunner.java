@@ -43,4 +43,4 @@ public class TestRunner {
   }
 }
 
-// vim: set si et ts=2 sw=2 :
+/* vim: set si et ts=2 sw=2 : */

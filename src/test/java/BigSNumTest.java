@@ -39,4 +39,4 @@ public class BigSNumTest {
   }
 }
 
-// vim: set si et ts=2 sw=2 :
+/* vim: set si et ts=2 sw=2 : */
