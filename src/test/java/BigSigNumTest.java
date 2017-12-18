@@ -1,5 +1,5 @@
 /*
- * @(#)BigSNumTest.java        1.1 17/11/17
+ * @(#)BigSigNumTest.java        1.1 17/11/17
  *
  * Copyright (c) 2017 Vladimir Valeyev
  *
@@ -24,15 +24,15 @@
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
-import com.github.valv.BigSNum;
+import com.github.valv.BigSigNum;
 
 /**
- * BigSNumTest class provides JUnit (4.0 and higher) test case for BigSNum class.
+ * BigSigNumTest class provides JUnit (4.0 and higher) test case for BigSigNum class.
  *
  * @version 1.1 17 Nov 2017
  * @author Vladimir Valeyev
  */
-public class BigSNumTest {
+public class BigSigNumTest {
   @Test
   public void testStub() {
     assertEquals(true, true);

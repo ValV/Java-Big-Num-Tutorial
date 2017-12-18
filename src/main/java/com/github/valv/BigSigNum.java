@@ -1,5 +1,5 @@
 /*
- * @(#)BigSNum.java        1.1 20/11/17
+ * @(#)BigSigNum.java     1.1 20/11/17
  *
  * Copyright (c) 2017 Vladimir Valeyev
  *
@@ -27,49 +27,49 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * BigSNum class provides basics for signed arbitrary precision arithmetic.
+ * BigSigNum class provides basics for signed arbitrary precision arithmetic.
  * This class implements signed integer radix arithmetic.
  *
  * @version 1.1 20 Nov 2017
  * @author Vladimir Valeyev
  */
-public class BigSNum extends BigNum {
+public class BigSigNum extends BigNum {
   protected boolean negative = false;
 
   // Default constructor
-  public BigSNum() {
+  public BigSigNum() {
     super();
   }
 
   // Integer constructor
-  public BigSNum(int number) {
-    this(number, BigSNum.RADIX_DEFAULT); // default radix is 10
+  public BigSigNum(int number) {
+    this(number, BigSigNum.RADIX_DEFAULT);
   }
 
   // Integer/radix constructor
-  public BigSNum(int number, byte radix) {
+  public BigSigNum(int number, byte radix) {
     super(number, radix);
     if (number < 0) this.negative = true;
   }
 
   // String constructor
-  public BigSNum(String number) {
-    this(number, BigSNum.RADIX_DEFAULT); // default radix is 10
+  public BigSigNum(String number) {
+    this(number, BigSigNum.RADIX_DEFAULT);
   }
 
   // String/radix constructor
-  public BigSNum(String number, byte radix) {
+  public BigSigNum(String number, byte radix) {
     super(number, radix); // TODO: handle leading sign
     if (number.charAt(0) == '-') this.negative = true;
   }
 
   // Object (BigNum) constructor
-  public BigSNum(BigNum number) {
+  public BigSigNum(BigNum number) {
     super(number); // copy
   }
 
-  // Object (BigSNum) constructor
-  public BigSNum(BigSNum number) {
+  // Object (BigSigNum) constructor
+  public BigSigNum(BigSigNum number) {
     super(number); // copy
     this.negative = number.negative;
   }
@@ -97,7 +97,7 @@ public class BigSNum extends BigNum {
     }
   }
 
-  public void add(BigSNum number) {
+  public void add(BigSigNum number) {
     if (this.negative ^ number.negative) { // different signs
       if (this.compare(number) < 0) {
         // 'this' absolute value is less than 'number' so
@@ -122,14 +122,14 @@ public class BigSNum extends BigNum {
   public void subtract(BigNum number) {
   }
 
-  public void subtract(BigSNum number) {
+  public void subtract(BigSigNum number) {
   }
 
   @Override
   public void multiply(BigNum number) {
   }
 
-  public void multiply(BigSNum number) {
+  public void multiply(BigSigNum number) {
   }
 
   @Override
@@ -137,7 +137,7 @@ public class BigSNum extends BigNum {
     return null;
   }
 
-  public BigNum divide(BigSNum number) {
+  public BigNum divide(BigSigNum number) {
     return null;
   }
 
