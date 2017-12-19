@@ -34,7 +34,7 @@ import com.github.valv.BigSigNum;
  */
 public class BigSigNumTest {
   @Test
-  public void testStub() {
+  public void testStub() throws Exception {
     assertEquals(true, true);
     System.out.println("\n...:::Initial data:::..."
       + "\n");

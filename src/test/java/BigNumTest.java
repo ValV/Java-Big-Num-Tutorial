@@ -35,7 +35,7 @@ import com.github.valv.BigNum;
  */
 public class BigNumTest {
   @Test
-  public void testConstructCompare() {
+  public void testConstructCompare() throws Exception {
     // Create numbers
     byte hex = 16;
     // BigNum class has several constructors:
@@ -79,7 +79,7 @@ public class BigNumTest {
   }
 
   @Test
-  public void testAddition() {
+  public void testAddition() throws Exception {
     // Create numbers
     byte hex = 16;
     // Addition is implemented for BigNum arguments only (.add(BigNum))
@@ -129,7 +129,7 @@ public class BigNumTest {
   }
 
   @Test
-  public void testSubtraction() {
+  public void testSubtraction() throws Exception {
     // Create numbers
     byte hex = 16;
     // Subtraction is not performed if a number has less than one digit (null)
@@ -184,7 +184,7 @@ public class BigNumTest {
   }
 
   @Test
-  public void testMultiplication() {
+  public void testMultiplication() throws Exception {
     // Create numbers
     byte hex = 16;
     // Multiplication is supported only by object (BigNum)
@@ -240,7 +240,7 @@ public class BigNumTest {
   }
 
   @Test
-  public void testDivision() {
+  public void testDivision() throws Exception {
     // Create numbers
     byte hex = 16;
     BigNum testNumber1 = new BigNum("44444444444444444444"); // 20 dec
@@ -299,7 +299,7 @@ public class BigNumTest {
   }
 
   @Test
-  public void testFactorial () {
+  public void testFactorial () throws Exception {
     BigNum testFactorial = new BigNum(1);
     for (int index = 1; index <= 1000; index ++) {
       testFactorial.multiply(new BigNum(index));
