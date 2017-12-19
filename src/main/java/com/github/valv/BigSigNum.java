@@ -81,7 +81,7 @@ public class BigSigNum extends BigNum {
 
   // Object (BigSigNum) constructor
   public BigSigNum(BigSigNum number) {
-    super(number);
+    super(number); // auto upcasting
     this.negative = number.negative;
   }
 
@@ -110,6 +110,15 @@ public class BigSigNum extends BigNum {
   }
 
   public void add(BigSigNum number) {
+    // Positive + positive = positive + positive
+    // Positive + negative = - (negative + positive)
+    // Negative + positive = negative + positive
+    // Negative + negative = - (positive + positive)
+    // Change sign only if the addend is negative (double not xor)
+    this.negative = !(this.negative ^ number.negative);
+    this.add((BigNum) number); // upcasting
+    this.negative = !(this.negative ^ number.negative);
+    /*
     if (this.radix != number.radix) return; // discard different radices
     if (this.negative ^ number.negative) {
       // (positive + negative) or (negative + positive)
@@ -131,37 +140,71 @@ public class BigSigNum extends BigNum {
     } else {
       // (positive + positive) or (negative + negative)
       super.add(number);
-    }
+    }*/
   }
 
   @Override
   public void subtract(BigNum number) {
+    // Positive - positive = - (negative + positive)
+    // Negative - positive = - (positive + positive)
+    // Minuend double sign inversion
+    this.negative = !this.negative;
+    this.add(number);
+    this.negative = !this.negative;
   }
 
   public void subtract(BigSigNum number) {
+    // Positive - positive = - (negative + positive)
+    // Negative - positive = - (positive + positive)
+    // Positive - negative = - (negative + negative)
+    // Negative - negative = - (positive + negative)
+    // Minuend double sign inversion
+    this.negative = !this.negative;
+    this.add(number);
+    this.negative = !this.negative;
   }
 
   @Override
   public void multiply(BigNum number) {
+    // Positive * positive = positive * positive
+    // Negative * positive = negative * positive
+    // Sign does not change
+    super.multiply(number);
   }
 
   public void multiply(BigSigNum number) {
+    // Positive * positive = positive * positive
+    // Positive * negative = negative * positive
+    // Negative * positive = negative * positive
+    // Negative * negative = positive * positive
+    // Transer multiplier's sign to multiplicand if negative (single not xor)
+    this.negative = !(this.negative ^ number.negative);
+    super.multiply((BigNum) number);
   }
 
   @Override
   public BigNum divide(BigNum number) {
-    return null;
+    // Positive * positive = positive * positive
+    // Negative * positive = negative * positive
+    // Sign does not change
+    return super.divide(number);
   }
 
   public BigNum divide(BigSigNum number) {
-    return null;
+    // Positive * positive = positive * positive
+    // Positive * negative = negative * positive
+    // Negative * positive = negative * positive
+    // Negative * negative = positive * positive
+    // Transer divisor's sign to dividend if negative (single not xor)
+    this.negative = !(this.negative ^ number.negative);
+    return super.divide((BigNum) number);
   }
 
   @Override
   public String toString() {
     String sign = "";
     if (this.negative && this.data != null)
-      if (!(this.length == 1 && this.data.get(0) == 0)) sign = "-";
+      if (this.length > 0 && this.data.get(0) > 0) sign = "-";
     return sign + super.toString();
   }
 }
