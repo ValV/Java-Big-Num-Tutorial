@@ -36,6 +36,8 @@ public class BigSigNumTest {
   @Test
   public void testStub() {
     assertEquals(true, true);
+    System.out.println("\n...:::Initial data:::..."
+      + "\n");
   }
 }
 

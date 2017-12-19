@@ -82,7 +82,7 @@ public class BigNum {
 
   // String constructor
   public BigNum(String number) {
-    this(number, BigNum.RADIX_DEFAULT); // default radix is 10
+    this(number, BigNum.RADIX_DEFAULT);
   }
 
   // String/radix constructor

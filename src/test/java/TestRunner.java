@@ -33,7 +33,7 @@ import org.junit.runner.notification.Failure;
  */
 public class TestRunner {
   public static void main(String[] args) {
-    Result result = JUnitCore.runClasses(BigNumTest.class);
+    Result result = JUnitCore.runClasses(BigNumTest.class, BigSigNumTest.class);
 
     for (Failure failure : result.getFailures()) {
       System.console().writer().println(failure.toString());

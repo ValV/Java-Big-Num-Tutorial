@@ -70,28 +70,28 @@ public class BigSigNum extends BigNum {
 
   // String/radix constructor
   public BigSigNum(String number, byte radix) {
-    super(number, radix); // TODO: handle leading sign
+    super(number, radix);
     if (number.charAt(0) == '-') this.negative = true;
   }
 
   // Object (BigNum) constructor
   public BigSigNum(BigNum number) {
-    super(number); // copy
+    super(number); // positive
   }
 
   // Object (BigSigNum) constructor
   public BigSigNum(BigSigNum number) {
-    super(number); // copy
+    super(number);
     this.negative = number.negative;
   }
 
   @Override
   public void add(BigNum number) {
-    if (this.radix != number.radix) return; // discard different radixs
-    if (this.negative) { // 'this' is negative
+    if (this.radix != number.radix) return; // discard different radices
+    if (this.negative) {
+      // Negative + positive
       if (this.compare(number) < 0) {
-        // 'this' absolute value is less than 'number' so
-        // swap the sign, swap values and subtract
+        // - lesser + greater -> greater - lesser
         this.negative = !this.negative;
         BigNum swap = new BigNum(number);
         ArrayList thisData = this.data;
@@ -99,32 +99,37 @@ public class BigSigNum extends BigNum {
         swap.data = thisData;
         super.subtract(swap);
       } else {
-        // 'this' absolute value is more than 'number' so
-        // just subtract
+        // - greater + lesser -> - (greater - lesser)
+        // lesser ~ lesser or equal
         super.subtract(number);
       }
-    } else { // 'this' and 'number' are positive so do add
+    } else {
+      // Positive + positive
       super.add(number);
     }
   }
 
   public void add(BigSigNum number) {
-    if (this.negative ^ number.negative) { // different signs
+    if (this.radix != number.radix) return; // discard different radices
+    if (this.negative ^ number.negative) {
+      // (positive + negative) or (negative + positive)
       if (this.compare(number) < 0) {
-        // 'this' absolute value is less than 'number' so
-        // set the sign of 'number', swap values and subtract
+        // (- lesser + greater) or (lesser - greater) ->
+        // (greater - lesser) or - (greater - lesser)
         this.negative = number.negative;
         BigNum swap = new BigNum(number); // automatic upcast
-        ArrayList thisData = this.data;
+        ArrayList<Byte> thisData = this.data;
         this.data = swap.data;
         swap.data = thisData;
         super.subtract(swap);
       } else {
-        // 'this' absolute value is more than 'number' so
-        // just subtract (the sign will remain the same)
+        // (- greater + lesser) or (greater - lesser) ->
+        // - (greater - lesser) or (greater - lesser)
+        // Lesser ~ lesser or equal
         super.subtract(number); // automatic upcast
       }
-    } else { // 'this' and 'number' have the same signs so do add
+    } else {
+      // (positive + positive) or (negative + negative)
       super.add(number);
     }
   }
