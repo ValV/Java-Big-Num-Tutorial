@@ -48,6 +48,17 @@ public class BigSigNum extends BigNum {
 
   // Integer/radix constructor
   public BigSigNum(int number, byte radix) {
+    super((long) number, radix);
+    if (number < 0) this.negative = true;
+  }
+
+  // Long constructor
+  public BigSigNum(long number) {
+    this(number, BigSigNum.RADIX_DEFAULT);
+  }
+
+  // Long/radix constructor
+  public BigSigNum(long number, byte radix) {
     super(number, radix);
     if (number < 0) this.negative = true;
   }
